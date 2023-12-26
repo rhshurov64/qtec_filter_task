@@ -8,26 +8,28 @@
 
             <!--Items Filter-->
             <div class="col-3">
-                <div class="card">
-                    <form method="post" class="p-1">
+                <div class="card p-3">
+                        <form id="price_search" action="" method="GET">
 
-                        <section class="mt-2">
-                            <span class="text-muted font-weight-bold">Price
-                                Range</span>
-                            <div class="d-flex-block">
-                                <input style="width: 120px;" type="number"
-                                    name="min"
-                                    class="form-control d-inline me-2"
-                                    placeholder="Min" />
-                                <input style="width: 120px;" type="number"
-                                    name="max"
-                                    class="form-control d-inline me-2"
-                                    placeholder="Max" />
-                                <button style="width: 50px; height: 36px;"
-                                    class="btn btn-success btn-sm d-inline">Go</button>
-                            </div>
-                        </section>
+                            <section class="mt-2">
+                                <span class="text-muted font-weight-bold">Price
+                                    Range</span>
+                                <div class="d-flex-block">
+                                    <input style="width: 120px;" type="number"
+                                        name="min" id="min"
+                                        class="form-control d-inline me-2"
+                                        placeholder="Min" required/>
 
+                                    <input style="width: 120px;" type="number"
+                                        name="max" id="max"
+                                        class="form-control d-inline me-2"
+                                        placeholder="Max" required/>
+
+                                    <button style="width: 50px; height: 36px;"
+                                        class="btn btn-success btn-sm d-inline">Go</button>
+                                </div>
+                            </section>
+                        </form>
                         <section class="mt-3">
                             <span
                                 class="text-muted font-weight-bold">Category</span>
@@ -35,8 +37,7 @@
 
                                 {% for category in categories %}
                                 <div class="form-check">
-                                    <input class="form-check-input"
-                                        type="checkbox" value="{{ category.id }}" id="category_{{ category.id }}">
+                                    <input class="form-check-input" data-filter="category" type="checkbox" value="{{ category.id }}" id="{{ category.id }}">
                                     <label class="form-check-label"
                                         for="categorya">
                                         {{category.name}}
@@ -55,8 +56,8 @@
 
                                 {% for brand in brands %}
                                 <div class="form-check">
-                                    <input class="form-check-input"
-                                        type="checkbox" value="{{ brand.id }}" id="brand_{{ brand.id }}>
+                                    <input class="form-check-input" data-filter="brand"
+                                        type="checkbox" value="{{ brand.id }}" id="{{ brand.id }}>
                                     <label class="form-check-label"
                                         for="categorya">
                                         {{brand.name}}
@@ -75,8 +76,8 @@
 
                                 {% for type in types %}
                                 <div class="form-check">
-                                    <input class="form-check-input"
-                                        type="checkbox" value="{{ type.id }}" id="type_{{ type.id }}>
+                                    <input class="form-check-input" data-filter="type"
+                                        type="checkbox" value="{{ type.id }}" id="{{ type.id }}>
                                     <label class="form-check-label"
                                         for="categorya">
                                         {{type.name}}
@@ -95,10 +96,8 @@
 
                                 {% for seller in sellers %}
                                 <div class="form-check">
-                                    <input class="form-check-input"
-                                        type="checkbox" value="{{ seller.id }} id="seller_{{ seller.id }}>
-                                    <label class="form-check-label"
-                                        for="categorya">
+                                    <input class="form-check-input" data-filter="seller" type="checkbox" value="{{ seller.id }}" id="{{ seller.id }}">
+                                    <label class="form-check-label">
                                         {{seller.name}}
                                     </label>
                                 </div>
@@ -115,8 +114,8 @@
 
                                 {% for warranty in warranty %}
                                 <div class="form-check">
-                                    <input class="form-check-input"
-                                        type="checkbox" value="{{ warranty.id }}" id="warranty_{{ warranty.id }}>
+                                    <input class="form-check-input" data-filter="warranty"
+                                        type="checkbox" value="{{ warranty.id }}" id="{{ warranty.id }}>
                                     <label class="form-check-label"
                                         for="categorya">
                                         {{warranty.duration}}
@@ -128,7 +127,6 @@
                             </div>
                         </section>
 
-                    </form>
                 </div>
             </div>
             <!--End Items Filter-->
@@ -136,7 +134,7 @@
             <!-- Items -->
             <div class="col-9">
                 <div class="container">
-                    <div class="row">
+                    <div class="row" id="product_show">
 
                         
                         {% for product in products %}
@@ -145,9 +143,10 @@
                             
                         <div class="col-12 col-sm-8 col-md-6 col-lg-4 mb-4">
                             <div class="card">
-                                <img class="card-img" style="height: 150px; width: 170px;"
-                                    src="https://s3.eu-central-1.amazonaws.com/bootstrapbaymisc/blog/24_days_bootstrap/vans.png"
-                                    alt="Vans">
+                                {% if product.image %}
+                                    <img class="p-2" style="height: 150px; width: 240px; margin:auto;" src="{{ product.image.url }}" alt="{{ product.name }}">
+                                {% endif %}
+                                
                                 <div
                                     class="card-img-overlay d-flex justify-content-end">
                                     <a href="#"
@@ -160,6 +159,10 @@
                                     <h6 class="card-subtitle mb-2 text-muted">Category: {{product.category}}</h6>
                                     <h6 class="card-subtitle mb-2 text-muted">Brand: {{product.brand}}</h6>
                                     <h6 class="card-subtitle mb-2 text-muted">Warrenty: {{product.warranty}}</h6>
+                                    <h6 class="card-subtitle mb-2 text-muted">Product type:
+                                        {{product.product_type}}</h6>
+                                    <h6 class="card-subtitle mb-2 text-muted">Seller:
+                                        {{product.seller}}</h6>
                                    
                                     
                                     <div
@@ -185,5 +188,84 @@
     </main>
 
 </div>
+
+
+<!-- <script>
+    $(document).ready(function(){
+        $('#price_search').on("submit", function(e){
+            e.preventDefault();
+            console.log('Price Submitted');
+
+            let min = $('#min').val();
+            let max = $('#max').val();
+
+
+            console.log(min);
+            console.log(max);
+            
+            $('#category-add :input').val('');
+
+
+            mydata = {min: min, max:max}
+            $('#product_show').empty();
+
+            $.ajax({
+                url :"{% url 'index' %}",
+                method: "GET",
+                data: mydata,
+                dataType: 'json',
+                success: function(response){
+                    console.log(response);
+                    $('#product_show').html(response.data);
+                }
+            })
+        });
+
+    });
+</script> -->
+
+<script>
+    $(document).ready(function(){
+        $(".form-check-input, #price_search").on('click submit', function(e){
+            if ($(this).attr('id') === 'price_search') {
+                e.preventDefault();
+            }
+
+                var filter_object = {};
+
+                var min = $('#min').val();
+                var max = $('#max').val();
+
+                filter_object['min'] = min;
+                filter_object['max'] = max;
+
+                $(".form-check-input").each(function(index, ele){
+                    var filter_value = $(this).val();
+                    var filter_key = $(this).data('filter');
+
+                    console.log(filter_key, filter_value);
+
+                    filter_object[filter_key] = Array.from(document.querySelectorAll('input[data-filter=' + filter_key + ']:checked')).map(function(el){
+                         return el.value;
+                    });
+                });
+
+                $.ajax({
+                    url: '{% url "filter_data" %}',
+                    data: filter_object,
+                    dataType: 'json',            
+                    success: function(res){                
+                        $("#product_show").html(res.data);                
+                    }
+                });
+            
+        });
+    });
+</script>
+
+    
+    
+
+
 
 {% endblock content %}

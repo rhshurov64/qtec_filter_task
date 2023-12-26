@@ -23,7 +23,7 @@ class Product_TypeAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('id','name', 'category', 'brand','product_type', 'warranty', 'seller', 'price')
+    list_display = ('id','name','image', 'category', 'brand','product_type', 'warranty', 'seller', 'price')
     list_filter = ('category', 'brand', 'warranty','product_type', 'seller')
     search_fields = ('name', 'brand__name', 'seller__name')
     list_editable = ('price',)
