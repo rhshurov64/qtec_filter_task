@@ -7,8 +7,8 @@ The search is fully dynamic. User can filter the search with all these criteria 
 -------------------------------
 **Uses Technology:**
 -----------------------------
-Django
-jQuery
-Ajax
-Bootstrap
+Django,
+jQuery,
+Ajax,
+Bootstrap,
 HTML
